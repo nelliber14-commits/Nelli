@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR COFFEE | Рідка Естетика</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,600&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #e0e0e0;
+            --accent-color: #ff4d00;
+            --font-main: 'Cormorant Garamond', serif;
+            --font-tech: 'Space Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.05;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--text-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+        
+        .cursor.active {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-color);
+            opacity: 0.8;
+            mix-blend-mode: normal;
+        }
+
+        h1 {
+            font-size: 8vw;
+            line-height: 0.9;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+        
+        p {
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: blur(2px) contrast(1.1); 
+            z-index: -1;
+        }
+
+        .hero-title {
+            text-align: center;
+            mix-blend-mode: exclusion;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-family: var(--font-tech);
+            font-size: 12px;
+            animation: bounce 2s infinite;
+        }
+
+        .menu-section {
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background-color: #111;
+        }
+
+        .menu-track {
+            display: flex;
+            gap: 10vw;
+            padding: 0 10vw;
+            width: fit-content;
+        }
+
+        .menu-card {
+            width: 30vw;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            opacity: 0.5;
+            transition: opacity 0.5s;
+        }
+        
+        .menu-card:hover {
+            opacity: 1;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 4px;
+            filter: grayscale(100%);
+            transition: 0.5s;
+        }
+
+        .menu-card:hover .card-img {
+            filter: grayscale(0%);
+            transform: scale(1.02);
+        }
+
+        .card-title {
+            font-size: 3rem;
+        }
+        
+        .card-price {
+            font-family: var(--font-tech);
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .story {
+            padding: 100px 10vw;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .story-text h2 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+        }
+
+        .parallax-img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        footer {
+            height: 50vh;
+            background: var(--accent-color);
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        footer h2 {
+            font-size: 5vw;
+        }
+        
+        footer a {
+            font-family: var(--font-tech);
+            color: #000;
+            text-decoration: none;
+            border-bottom: 2px solid #000;
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 15vw; }
+            .menu-track { gap: 5vw; padding: 0 5vw; }
+            .menu-card { width: 80vw; }
+            .story { grid-template-columns: 1fr; }
+            .cursor { display: none; }
+            * { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+    
+    <div class="cursor"></div>
+
+    <section class="hero">
+        <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=2574&auto=format&fit=crop" class="hero-bg" alt="Coffee Texture">
+        
+        <div class="hero-title">
+            <p>ЗАСН. 2024</p>
+            <h1>Noir<br>Coffee</h1>
+            <p>РИТУАЛИ ТА ПЛИННІСТЬ</p>
+        </div>
+        
+        <div class="scroll-indicator">ГОРТАЙТЕ ВНИЗ</div>
+    </section>
+
+    <section class="menu-section">
+        <div class="menu-track">
+            
+            <div class="menu-card" data-cursor="VIEW">
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=2574&auto=format&fit=crop" class="card-img" alt="Espresso">
+                <div>
+                    <h3 class="card-title">Espresso</h3>
+                    <span class="card-price">60₴ // PURE ENERGY</span>
+                    <p>Щільне тіло, ноти темного шоколаду та цитрусова кислинка.</p>
+                </div>
+            </div>
+
+            <div class="menu-card" data-cursor="TASTY">
+                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=2635&auto=format&fit=crop" class="card-img" alt="Flat White">
+                <div>
+                    <h3 class="card-title">Flat White</h3>
+                    <span class="card-price">85₴ // SILKY SMOOTH</span>
+                    <p>Подвійний рістрето та мікро-піна. Ідеальний баланс.</p>
+                </div>
+            </div>
+
+            <div class="menu-card" data-cursor="COOL">
+                <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=2669&auto=format&fit=crop" class="card-img" alt="Cold Brew">
+                <div>
+                    <h3 class="card-title">Cold Brew</h3>
+                    <span class="card-price">90₴ // 18 HOURS</span>
+                    <p>Холодне заварювання. Низька кислотність, високий кофеїн.</p>
+                </div>
+            </div>
+
+            <div class="menu-card" data-cursor="SWEET">
+                <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=2657&auto=format&fit=crop" class="card-img" alt="Dessert">
+                <div>
+                    <h3 class="card-title">Croissant</h3>
+                    <span class="card-price">75₴ // BUTTERY</span>
+                    <p>Свіжа випічка щоранку. Хрускіт, який чути.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="story">
+        <div class="story-text">
+            <p>03 — ФІЛОСОФІЯ</p>
+            <h2>Ми варимо час,<br>а не просто каву.</h2>
+            <p>У світі постійного шуму ми створили місце тиші. Темні тони, тактильні матеріали та запах свіжого помелу. Тут можна зупинитися.</p>
+        </div>
+        <div class="story-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2671&auto=format&fit=crop" class="parallax-img" alt="Interior">
+        </div>
+    </section>
+
+    <footer>
+        <h2>Завітайте на смак.</h2>
+        <p>вул. Хрещатик, 25, Київ</p>
+        <a href="#" data-cursor="MAP">Прокласти маршрут</a>
+    </footer>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const cursor = document.querySelector('.cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.1,
+                ease: "power2.out"
+            });
+        });
+
+        document.querySelectorAll('[data-cursor], a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        const menuSection = document.querySelector(".menu-section");
+        const menuTrack = document.querySelector(".menu-track");
+
+        let getScrollAmount = () => {
+            let trackWidth = menuTrack.scrollWidth;
+            return -(trackWidth - window.innerWidth);
+        };
+
+        const tween = gsap.to(menuTrack, {
+            x: getScrollAmount,
+            ease: "none",
+        });
+
+        ScrollTrigger.create({
+            trigger: ".menu-section",
+            start: "top top",
+            end: () => `+=${getScrollAmount() * -1}`,
+            pin: true,
+            animation: tween,
+            scrub: 1,
+            invalidateOnRefresh: true
+        });
+
+        gsap.from(".hero h1", {
+            y: 100,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power4.out",
+            delay: 0.5
+        });
+
+        gsap.to(".parallax-img", {
+            yPercent: -20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".story",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+    </script>
+</body>
+</html>
